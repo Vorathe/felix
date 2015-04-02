@@ -2,9 +2,7 @@
 
 .row { margin-left: -10px; margin-right: -10px; }
 
-[class*="grid-"] { padding-left: 10px; padding-right: 10px; float: left; }
-
-[class*="grid-"], [class*="grid-"]:after, [class*="grid-"]:before { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+[class*="grid-"] { padding-left: 10px; padding-right: 10px; float: left; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
 .grid-1 { width: 8.33333%; }
 .grid-1.fixed-width { width: 80px; }

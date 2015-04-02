@@ -7,17 +7,16 @@ $max-width: none;
 
 $gutter-width-half: $gutter-width / 2;
 $flex-widths: ();
-$fixx-widths: ();
-
-.container { max-width: $max-width; min-width: $fixed-width + $gutter-width; margin-right: auto; margin-left: auto; padding-left: $gutter-width-half; padding-right: $gutter-width-half; @include box-sizing(border-box); }
-.row { margin-left: -$gutter-width-half; margin-right: -$gutter-width-half; }
-[class*="grid-"] { padding-left: $gutter-width / 2; padding-right: $gutter-width / 2; float: left; }
-[class*="grid-"], [class*="grid-"]:after, [class*="grid-"]:before { @include box-sizing(border-box); }
+$fix-widths: ();
 
 @for $i from 1 through $number-of-columns {
 	$flex-widths: append($flex-widths, $i / $number-of-columns * 100%);
-	$fixx-widths: append($fixx-widths, $i / $number-of-columns * $fixed-width);
+	$fix-widths: append($fix-widths, $i / $number-of-columns * $fixed-width);
 }
+
+.container { max-width: $max-width; min-width: $fixed-width + $gutter-width; margin-right: auto; margin-left: auto; padding-left: $gutter-width-half; padding-right: $gutter-width-half; @include box-sizing(border-box); }
+.row { margin-left: -$gutter-width-half; margin-right: -$gutter-width-half; }
+[class*="grid-"] { padding-left: $gutter-width / 2; padding-right: $gutter-width / 2; float: left; @include box-sizing(border-box); }
 
 @for $i from 1 through length($flex-widths) {
 	$ii: 1;
@@ -25,10 +24,10 @@ $fixx-widths: ();
 	.grid-#{$i} {
 		width: nth($flex-widths, $i);
 
-		&.fixed-width { width: nth($fixx-widths, $i); }
+		&.fixed-width { width: nth($fix-widths, $i); }
 
 		@while $ii <= $number-of-columns - $i {
-			&.with-fixed-#{$ii} { width: calc(#{nth($flex-widths, $i + $ii)} - #{nth($fixx-widths, $ii)}); }
+			&.with-fixed-#{$ii} { width: calc(#{nth($flex-widths, $i + $ii)} - #{nth($fix-widths, $ii)}); }
 
 			$ii: $ii + 1;
 		}
