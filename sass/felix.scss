@@ -1,0 +1,36 @@
+@import "compass";
+
+$column-count: 12;
+$gutter-width: 20px;
+$fixed-width: 960px;
+$max-width: "none";
+
+@mixin calc-width ($a, $b) {
+	$left: width($a + $b, $column-count, 100%);
+	$right: width($b, $column-count, $fixed-width);
+
+	width: calc(#{$left} - #{$right});
+}
+
+@function width ($numerator, $denominator, $full-width) {
+	@return $numerator / $denominator * $full-width;
+}
+
+.container { max-width: $max-width; min-width: $fixed-width + $gutter-width; margin-right: auto; margin-left: auto; padding-left: $gutter-width / 2; padding-right: $gutter-width / 2; @include box-sizing(border-box); }
+.row { margin-left: -$gutter-width / 2; margin-right: -$gutter-width / 2; }
+[class*="grid-"] { padding-left: $gutter-width / 2; padding-right: $gutter-width / 2; float: left; }
+[class*="grid-"], [class*="grid-"]:after, [class*="grid-"]:before { @include box-sizing(border-box); }
+
+@for $i from 1 through $column-count {
+	.grid-#{$i} { width: 100% / $column-count * $i; }
+	.grid-#{$i}.fixed-width { width: $fixed-width / $column-count * $i; }
+
+	@if $column-count - $i > 0 {
+		@for $e from 1 through $column-count - $i {
+			.grid-#{$i}.with-fixed-#{$e} { @include calc-width($i, $e); }
+		}
+	}
+}
+
+.no-left-spacing { padding-left: 0; }
+.no-right-spacing { padding-right: 0; }
