@@ -1,33 +1,36 @@
 @import "compass";
 
-$column-count: 12;
-$gutter-width: 20px;
+$number-of-columns: 12;
 $fixed-width: 960px;
-$max-width: "none";
+$gutter-width: 20px;
+$max-width: none;
 
-@mixin calc-width ($a, $b) {
-	$left: width($a + $b, $column-count, 100%);
-	$right: width($b, $column-count, $fixed-width);
+$gutter-width-half: $gutter-width / 2;
+$flex-widths: ();
+$fixx-widths: ();
 
-	width: calc(#{$left} - #{$right});
-}
-
-@function width ($numerator, $denominator, $full-width) {
-	@return $numerator / $denominator * $full-width;
-}
-
-.container { max-width: $max-width; min-width: $fixed-width + $gutter-width; margin-right: auto; margin-left: auto; padding-left: $gutter-width / 2; padding-right: $gutter-width / 2; @include box-sizing(border-box); }
-.row { margin-left: -$gutter-width / 2; margin-right: -$gutter-width / 2; }
+.container { max-width: $max-width; min-width: $fixed-width + $gutter-width; margin-right: auto; margin-left: auto; padding-left: $gutter-width-half; padding-right: $gutter-width-half; @include box-sizing(border-box); }
+.row { margin-left: -$gutter-width-half; margin-right: -$gutter-width-half; }
 [class*="grid-"] { padding-left: $gutter-width / 2; padding-right: $gutter-width / 2; float: left; }
 [class*="grid-"], [class*="grid-"]:after, [class*="grid-"]:before { @include box-sizing(border-box); }
 
-@for $i from 1 through $column-count {
-	.grid-#{$i} { width: 100% / $column-count * $i; }
-	.grid-#{$i}.fixed-width { width: $fixed-width / $column-count * $i; }
+@for $i from 1 through $number-of-columns {
+	$flex-widths: append($flex-widths, $i / $number-of-columns * 100%);
+	$fixx-widths: append($fixx-widths, $i / $number-of-columns * $fixed-width);
+}
 
-	@if $column-count - $i > 0 {
-		@for $e from 1 through $column-count - $i {
-			.grid-#{$i}.with-fixed-#{$e} { @include calc-width($i, $e); }
+@for $i from 1 through length($flex-widths) {
+	$ii: 1;
+
+	.grid-#{$i} {
+		width: nth($flex-widths, $i);
+
+		&.fixed-width { width: nth($fixx-widths, $i); }
+
+		@while $ii <= $number-of-columns - $i {
+			&.with-fixed-#{$ii} { width: calc(#{nth($flex-widths, $i + $ii)} - #{nth($fixx-widths, $ii)}); }
+
+			$ii: $ii + 1;
 		}
 	}
 }
